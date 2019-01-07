@@ -1,0 +1,84 @@
+<div style="margin: 15px;">
+<query-builder [(ngModel)]='uiExpression' [config]='currentConfig' style="padding: 15px;">
+    <ng-container *queryButtonGroup="let ruleset; let addRule=addRule; let addRuleSet=addRuleSet; let removeRuleSet=removeRuleSet">
+      <button mat-icon-button color="primary" (click)="addRule()" matTooltip="Add Rule" matTooltipPosition="above">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" (click)="addRuleSet()" matTooltip="Add Rule Set" matTooltipPosition="above">
+        <mat-icon>add_circle_outline</mat-icon>
+      </button>
+      <button mat-icon-button color="accent" *ngIf="removeRuleSet" (click)="removeRuleSet()" matTooltip="Remove Rule Set" matTooltipPosition="above">
+        <mat-icon>remove_circle_outline</mat-icon>
+      </button>
+    </ng-container>
+    <ng-container *queryRemoveButton="let rule; let removeRule=removeRule">
+      <button mat-icon-button color="accent" (click)="removeRule(rule)" matTooltip="Remove Rule" matTooltipPosition="above">
+        <mat-icon>remove</mat-icon>
+      </button>
+    </ng-container>
+    <ng-container *querySwitchGroup="let ruleset;  let onChange=onChange">
+      <mat-radio-group *ngIf="ruleset" [(ngModel)]="ruleset.condition" (ngModelChange)="onChange($event)">
+        <mat-radio-button value="and">And</mat-radio-button>
+        <mat-radio-button value="or">Or</mat-radio-button>
+      </mat-radio-group>
+    </ng-container>
+    <ng-container *queryInput="let rule; let field=field; type: 'string'; let onChange=onChange">
+      <mat-form-field>
+        <input matInput [(ngModel)]="rule.value" (ngModelChange)="onChange()" (blur)="apply()">
+      </mat-form-field>
+    </ng-container>
+    <ng-container *queryInput="let rule; let field=field; type: 'number'; let onChange=onChange">
+      <mat-form-field>
+        <input matInput [(ngModel)]="rule.value" type="number" (ngModelChange)="onChange()" (blur)="apply()">
+      </mat-form-field>
+    </ng-container>
+    <ng-container *queryInput="let rule; type: 'date'; let onChange=onChange">
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="rule.value" (ngModelChange)="getDate($event, rule)" (blur)="apply()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *queryInput="let rule; let field=field; let options=options; type: 'multiselect'">
+      <mat-form-field>
+        <mat-select multiple [(ngModel)]="rule.value">
+          <mat-option *ngFor="let opt of options" [value]="opt.value">
+            {{ opt.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *queryInput="let rule; let field=field; let options=options; type: 'category'; let onChange=onChange">
+      <mat-form-field>
+        <mat-select [(ngModel)]="rule.value" (ngModelChange)="onChange()" (blur)="apply()">
+          <mat-option *ngFor="let opt of options" [value]="opt.value">
+            {{ opt.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *queryEntity="let rule; let entities=entities; let onChange=onChange">
+      <mat-form-field>
+        <mat-select [(ngModel)]="rule.entity" (ngModelChange)="onChange($event, rule)">
+          <mat-option *ngFor="let entity of entities" [value]="entity.value">
+            {{entity.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *queryField="let rule; let fields=fields; let onChange=onChange; let getFields = getFields">
+      <mat-form-field>
+        <mat-select [(ngModel)]="rule.field" (ngModelChange)="onChange($event, rule)" (blur)="changeFields($event, rule)">
+          <mat-option *ngFor="let field of getFields(rule.entity)" [value]="field.value">{{field.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *queryOperator="let rule; let operators=operators; let onChange=onChange">
+      <mat-form-field>
+        <mat-select [(ngModel)]="rule.operator" (ngModelChange)="onChange()" (blur)="apply()">
+          <mat-option *ngFor="let value of operators" [value]="value">{{value}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+  </query-builder>
+</div>

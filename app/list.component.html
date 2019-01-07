@@ -1,0 +1,99 @@
+<div class="row " id="row-new" >
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <span class="heading">List</span><br>
+        <label class="subHeading" >List/ <b>Create </b></label>
+        <br>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2">
+    </div>
+    <div class="col-sm-4 col-md-4 col-lg-4">
+        <p-growl [(value)]="msgs" styleClass="registerGrowl"></p-growl>
+    </div>
+</div>
+<div class="row row-spacing" id="row-new" >
+    <app-listNav [salesActiveLink]="salesActiveLinkValue"></app-listNav>
+</div>
+<br>
+<div class="row row-spacing" id="row-new" >
+    <div class="contentClass">
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label class="label_style">List Name*</label>
+                <br>
+                <input type="text" class="inputFields" placeholder="List Name" [(ngModel)]="listName" required  >   
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label class="label_style">Attribute Name</label>
+                <br>
+                <select [(ngModel)]="selectedAttribute"  class="inputFields" style="width:100%;">
+                    <option [ngValue]=null >Select Attribute </option>
+                    <option *ngFor="let single_attribute of attributeList" [ngValue]="single_attribute.userColumnName">{{single_attribute.userColumnName}}</option> 
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="row" id="row-new" *ngIf="listValues.length>0">
+            <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+                <thead>
+                    <tr>
+                        <th>LIST VALUE *</th>
+                        <th>START DATE</th>
+                        <th>END DATE</th>
+                        <th>SPLIT %</th>
+                    </tr>  
+                </thead>
+                <tbody>
+                    <tr *ngFor="let single_list of listValues | paginate: { itemsPerPage: 5, currentPage: p, id:'list'};let i=index ">
+                        <td class="tableContent">
+                            <input type="text" class="inputFields" placeholder="List Value" [(ngModel)]="single_list.listValue" required  >
+                        </td>
+                        <td class="tableContent">
+                            <p-calendar   [(ngModel)]="single_list.displayStartDate" (ngModelChange)="changeStartDate(single_list)" [showIcon]="true" ></p-calendar>  
+                        </td>
+                        <td class="tableContent">
+                            <p-calendar   [(ngModel)]="single_list.displayEndDate" (ngModelChange)="changeEndDate(single_list)" [showIcon]="true" ></p-calendar> 
+                        </td>
+                        <td class="tableContent"> 
+                            <input type="text" class="inputFields"  [(ngModel)]="single_list.split" required  > 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination-controls (pageChange)="p = $event" autoHide="true" id="list" class="paginateResults"></pagination-controls>
+            <!--<div class="row" *ngFor="let single_list of listValues">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="label_style">List Value*</label>
+                    <br>
+                    <input type="text" class="inputFields" placeholder="List Value" [(ngModel)]="single_list.listValue" required  >   
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="label_style">Start Date</label>
+                    <br>
+                    <p-calendar   [(ngModel)]="single_list.displayStartDate" (ngModelChange)="changeStartDate(single_list)" [showIcon]="true" ></p-calendar>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="label_style">End Date</label>
+                    <br>
+                    <p-calendar   [(ngModel)]="single_list.displayEndDate" (ngModelChange)="changeEndDate(single_list)" [showIcon]="true" ></p-calendar>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="label_style">Split</label>
+                    <br>
+                    <input type="text" class="inputFields"  [(ngModel)]="single_list.split" required  >          
+                </div>
+            </div>-->
+            <br>   
+        </div>
+        <br>
+        <div class="row" id="row-new">
+            <div class="col-sm-1 col-md-1 col-lg-1"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <button mat-button color="primary" (click)="addList()"  style="background-color:#508DCA;color:white;">Add Values</button>
+                <button mat-raised-button color="primary" *ngIf="showSave" (click)="save()"  style="background-color:#508DCA;color:white;">Save</button>
+                <button mat-raised-button color="primary" (click)="createNew()"  style="background-color:#508DCA;color:white;">Clear</button>
+            </div>
+            <div class="col-sm-5 col-md-5 col-lg-5"></div>
+                
+        </div>
+    </div>
+</div>

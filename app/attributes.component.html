@@ -1,0 +1,202 @@
+<div class="row" id="row-border-my">
+  <div class="col-sm-6 col-md-6 col-lg-6">
+    <span class="heading-my">Attributes</span>
+    <br>
+    <label class="subHeading-my">Attributes
+    </label>
+    <br>
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-4">
+    <p-growl [(value)]="msgs" styleClass="registerGrowl"></p-growl>
+  </div>
+</div>
+
+<div class="row" id="row-border-mys" style="margin-left: 16px;margin-right: 16px;">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <mat-horizontal-stepper #stepper="matHorizontalStepper">
+      <mat-step>
+        <ng-template matStepLabel>Attributes List</ng-template>
+        <div class="row" *ngIf="AttributesList.length>0">
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <table class="table table-bordered" style="background-color:white;border:1px solid #D9D9D8" *ngIf="AttributesList.length > 0">
+              <thead>
+                <tr>
+                  <th class="chooseClass">ATTRIBUTE NAME</th>
+                  <th class="chooseClass">DESCRIPTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let AL of AttributesList | paginate: { id: 'ALIID', itemsPerPage: limit, currentPage: p, totalItems: Count };index as ALI;"
+                  [ngClass]="{'selectedList':AL.selected}">
+                  <td (click)="attributeSelected(AL,ALI)" style="cursor: pointer;color:#6E6761">{{AL.userColumnName}}</td>
+                  <td></td>
+                </tr>
+
+              </tbody>
+            </table>
+            <pagination-controls (pageChange)="p = $event" autoHide="true" id="ALIID" class="paginateResults"></pagination-controls>
+          </div>
+          <div class="col-sm-8 col-md-8 col-lg-8">
+            <table class="table table-bordered" style="background-color:white;border:1px solid #D9D9D8" *ngIf="attributeDetail">
+              <tr>
+                <!-- <th class="headerClass">Attribute Name</th> -->
+                <th class="headerClass">Attribute Map Value</th>
+                <!-- <th class="headerClass" *ngIf="ValuesA.length>0">List of Values</th> -->
+              </tr>
+              <tr>
+                <!-- <td style="font-size: 14px;border-top: none;">{{selectedAttribute.userColumnName}}</td> -->
+                <td style="font-size: 14px;border-top: none;">
+                  <span *ngFor="let attrib_data of attributeDetail;let i=index;">{{attrib_data.attribMapValue}}<span
+                      *ngIf="i<attributeDetail.length-1">,</span></span>
+                  &nbsp;&nbsp;<span *ngIf="!edit">
+                    <a (click)="showEdit()"><i class="material-icons" *ngIf="showEditOption">edit</i></a>
+                    <span *ngIf="!showEditOption" class="text-info">Attribute is not list type</span>
+                  </span>
+                  <span *ngIf="edit">
+                    <input [type]="inputType ? 'number' : 'text'" class="inputFields" style="width:170px;" [(ngModel)]="newValue" aria-describedby="AttributeMapValue" placeholder="Add Value">
+                    <a><i class="material-icons" title="use + icon to add new values or minus to remove">info</i></a>
+                    <a (click)="add()"><i class="material-icons">add_circle</i></a>
+                    <a (click)="save()"><i class="material-icons">save</i></a>
+                    <a (click)="cancel()"><i class="material-icons">remove_circle</i></a>
+                    <div class="form-group" *ngIf="value_list.length>0" style="max-height: 100px;padding-top: 7px;overflow-y: auto;">
+                      <span class="badge badge-pill badge-secondary" *ngFor="let item of value_list;let teci=index;">{{item}}
+                        <span (click)="removeTechValue(teci)" style="cursor: pointer;">&times;</span></span>
+                    </div>
+                  </span>
+                </td>
+                <!-- <td style="font-size: 14px;border-top: none;" *ngIf="ValuesA.length>0">{{ValuesA}}</td> -->
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <!--<div class="row justify-content-end" *ngIf="AttributesList.length>0">
+          <pagination-controls id="ALIID" (pageChange)="pageChanged($event)" maxSize="10" directionLinks="true"
+            autoHide="true" previousLabel="Previous" nextLabel="Next" screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+          </pagination-controls>
+        </div>-->
+        <div class="row justify-content-end">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <button mat-button matStepperNext id="modifyButtonStyle_attribute" (click)="goto_next()">Add New Attribute</button>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Add New Attribute</ng-template>
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Attribute Name:</label>
+                    <input type="text" class="form-control" [(ngModel)]="attributeName" formControlName="Attribute_Name"
+                      placeholder="Attribute Name" aria-describedby="Enter Attribute Name" required>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Attribute data type:</label>
+                    <select class="form-control" placeholder="Attribute Data Type" [(ngModel)]="attributeDataType"
+                      formControlName="Attribute_type">
+                      <option [value]="null">Select Attribute Data Type</option>
+                      <option *ngFor="let case of caseItems;index as CI" [value]="case.value">{{ case.viewValue }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Attribute Value:</label>
+                    <select class="form-control" [(ngModel)]="attributeValueType" placeholder="Attribute Type Values"
+                      formControlName="Attribute_type_values" (change)="AttributeFind($event.target.value)">
+                      <option [value]="null">Select Attribute Value</option>
+                      <option *ngFor="let ATT of Attribute_values_array;index as ATTI" [value]="ATT.view_Value">{{
+                        ATT.view_Value }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <!-- <div class="form-group" *ngIf="selectedValue == 'Freeform text'">
+                    <label>Freeform Text:</label>
+                    <input type="text" class="form-control" formControlName="Freeform_text" placeholder="Enter Freeform Text"
+                      aria-describedby="Freeform_text" required>
+                  </div> *ngIf="attribute_lov.length>0" -->
+                  <div class="form-group" *ngIf="selectedValue == 'List of values'">
+                    <div class="form-group">
+                      <label>List of values:</label>
+                      <input type="text" placeholder="Enter values" class="form-control" [(ngModel)]="techValue"
+                        formControlName="attributelov" (keyup)="onKeyTech($event)" aria-describedby="AttributeValue"
+                        required>
+                        <small id="AttributeValue" class="form-text text-muted" title="we can add more number of list of values by typing ;">we can add more number of list of values by typing ;</small>
+                    </div>
+                    <div class="form-group" style="max-height: 100px;padding-top: 7px;overflow-y: auto;">
+                      <span class="badge badge-pill badge-secondary" *ngFor="let item of attribute_lov;let teci=index;">{{item}}
+                        <span (click)="removeTech(teci)" style="cursor: pointer;">&times;</span></span>
+                      <!-- <span class="badge badge-pill badge-secondary" *ngFor="let item of attribute_lov;let teci=index;">{{
+                        item }}
+                        <i class="material-icons icon_text" (click)="removeTech(teci)" style="cursor: pointer;">close</i>
+                      </span> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" class="form-control" [(ngModel)]="description" formControlName="Attr_Description"
+                      placeholder="Description" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+              <ul class="list-inline" style="list-style-type:none;float: right;">
+                <li class="list-inline-item"><button mat-button matStepperPrevious id="modifyButtonStyle_attribute">Back</button></li>
+                <li class="list-inline-item"><button mat-button id="modifyButtonStyle_attribute" (click)="onSubmitAttributes()"
+                    [disabled]="secondFormGroup.value.Attribute_Name==''||secondFormGroup.value.Attribute_type_values==''||secondFormGroup.value.Attribute_type==''">Next</button></li>
+              </ul>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Review and Save</ng-template>
+        <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+          <thead>
+            <tr>
+              <th class="tableContent">ATTRIBUTE NAME</th>
+              <th class="tableContent">ATTRIBUTE DATA TYPE</th>
+              <th class="tableContent">ATTRIBUTE VALUE</th>
+              <th class="tableContent" *ngIf="attribute_lov.length>0">ATTRIBUTE TYPE VALUES</th>
+              <th class="tableContent">DESCRIPTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="tableContent">{{ attributeName }}</td>
+              <td class="tableContent">{{ attributeDataType }}</td>
+              <td class="tableContent">{{ attributeValueType }}</td>
+              <td class="tableContent" *ngIf="attribute_lov.length>0">
+                <span *ngFor="let value of attribute_lov;let i=index;"> {{value}}<span *ngIf="i<attribute_lov.length-1">,</span></span></td>
+              <td class="tableContent">{{ description }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <ul class="list-inline" style="list-style-type:none;float: right;">
+            <li class="list-inline-item"><button mat-button matStepperPrevious id="modifyButtonStyle_attribute_1">Back</button></li>
+            <li class="list-inline-item"><button mat-button matStepperNext id="modifyButtonStyle_attribute_1" (click)="saveAttr()">Save</button></li>
+          </ul>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</div>

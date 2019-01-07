@@ -1,0 +1,159 @@
+<div class="row" id="row-border-my">
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <span class="heading-my">Category</span>
+        <br>
+        <label class="subHeading-my">Category</label>
+        <br>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2"></div>
+    <div class="col-sm-4 col-md-4 col-lg-4">
+        <p-growl [(value)]="msgs" styleClass="registerGrowl"></p-growl>
+    </div>
+</div>
+
+<mat-horizontal-stepper linear="true" #stepper>
+    <mat-step>
+        <ng-template matStepLabel>Define Category</ng-template>
+        <div class="row" *ngIf="DefinedCategoryList.length>0">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="table-responsive">
+                    <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+                        <thead>
+                            <tr>
+                                <!-- <th>S.No.</th> -->
+                                <th class="tableContent">CATEGORY NAME</th>
+                                <th class="tableContent">START DATE</th>
+                                <th class="tableContent">END DATE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let DCA of DefinedCategoryList| paginate: { itemsPerPage: 5, currentPage: p};index as DCAI;">
+                                <!-- <td>{{ DCAI+1 }}</td> -->
+                                <td class="tableContent">{{ DCA.ruleCategory }}</td>
+                                <td class="tableContent">{{ DCA.startDate }}</td>
+                                <td class="tableContent">{{ DCA.endDate }}</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                    <pagination-controls (pageChange)="p = $event" autoHide="true" class="paginateResults"></pagination-controls>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="DefinedCategoryList.length===0">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6 text-center">
+                <label>No defined categories</label>
+            </div>
+        </div>
+        <button mat-button matStepperNext id="nextToSecondStepCat" (click)="addCatgeory()">Add Category</button>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Pre-Defined Categories</ng-template>
+        <div class="row" id="row-new">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Select Category</div>
+                    <div class="panel-body" style="height:200px;overflow-y:auto;">
+                        <ul class="list-group">
+                            <li draggable *ngFor="let item of categoryList; let i = index" (onDragEnd)="onItemDragged(i)"
+                                [dragData]="item" class="list-group-item">{{item.lookupValue}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default" droppable (onDrop)="onItemDrop($event)">
+                    <div class="panel-heading">Drop Category here</div>
+                    <div class="panel-body" style="height:200px;overflow-y:auto;">
+                        <li *ngFor="let item of droppedItems; let j = index" class=" list-group-item">{{item.lookupValue}}
+                            <a (click)="removeItem(j)" style="cursor:pointer;"><i class="material-icons pull-right"
+                                    style="font-size: 12px;">delete</i></a></li>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+                <button mat-button matStepperNext id="nextToThirdStepCat" (click)="addNew()" [disabled]="droppedItems.length>0" style="margin-left: 15px;">Add New </button>
+                <button mat-button matStepperNext id="nextToThirdStepCat" (click)="skipAdd()" [disabled]="droppedItems.length==0" style="margin-left: 15px;">Next</button>
+                <button mat-button matStepperPrevious id="prevToOneStepCat">Back</button>
+            </div>
+        </div>
+    </mat-step>
+    <mat-step *ngIf="add">
+        <ng-template matStepLabel>New Category</ng-template>
+        <div class="row" style="height: 350px;">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <table class="table">
+                    <tr>
+                        <td class="borderNoneCat width33Cat">
+                            <div class="form-group" style="width: 250px;">
+                                <label>Category Name:</label>
+                                <input type="text" class="form-control form-controlStyleInput rulePageInput"
+                                    [(ngModel)]="CategoryName" placeholder="Category Name" aria-describedby="Category Name"
+                                    required>
+                            </div>
+                        </td>
+                        <td class="borderNoneCat width33Cat">
+                            <p class="marBotTen">Start Date</p>
+                            <p-calendar [inline]="false" [style]="{ 'overflow': 'visible', 'z-index': '999' }"
+                                [(ngModel)]="Start_Date" [showIcon]="true" (onSelect)="selectedStartDate(Start_Date)"></p-calendar>
+                        </td>
+                        <td class="borderNoneCat width33Cat">
+                            <p class="marBotTen">End Date</p>
+                            <p-calendar [inline]="false" [minDate]="minInEndDate" [style]="{ 'overflow': 'visible', 'z-index': '999' }"
+                                [(ngModel)]="End_Date" [showIcon]="true" (onSelect)="selectedEndDate(End_Date, Start_Date)"></p-calendar>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-right" style="position: absolute;top: 250px;right: 0px;">
+                <button mat-button id="nextToFourthStepCat" (click)="nextToThirdStepCategory()" style="margin-left: 15px;">Next</button>
+                <button mat-button matStepperPrevious id="prevToSecondStepCat">Back</button>
+            </div>
+        </div>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Review and Save</ng-template>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <!-- <th class="tableContent">S.No.</th> -->
+                            <th class="tableContent">CATEGORY NAME</th>
+                            <th class="tableContent">START DATE</th>
+                            <th class="tableContent">END DATE</th>
+                        </tr>
+                        <tr *ngFor="let SC of reviewCategories| paginate: { itemsPerPage: 5, currentPage: p2, id:'list2'};index as SCI;">
+                            <!-- <td>{{ SCI+1 }} <img src="" alt="" /> </td> -->
+                            <td class="tableContent">{{ SC.ruleCategory }}</td>
+                            <td class="tableContent">{{ SC.startDate }}</td>
+                            <td class="tableContent">{{ SC.endDate }}</td>
+                        </tr>
+                    </table>
+                    <pagination-controls (pageChange)="p2 = $event" autoHide="true" id="list2" class="paginateResults"></pagination-controls>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+                <button mat-button id="saveStepCat" (click)="onSaveCategory()" style="margin-left: 15px;">Save</button>
+                <button mat-button matStepperPrevious id="prevToThirdStepCat">Back</button>
+            </div>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>
+
+
+<!-- <div class="row" id="row-new">
+    <div class="col-sm-2 col-md-2 col-lg-2"></div>
+    <div class="col-sm-3 col-md-3 col-lg-3">
+        <button class="btn btn btn-primary" (click)="addNew()">Add Category</button>
+    </div>
+</div> -->

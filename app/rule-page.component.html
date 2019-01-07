@@ -1,0 +1,360 @@
+<div class="row" id="row-border-my">
+  <div class="col-sm-6 col-md-6 col-lg-6">
+    <span class="heading-my">Rule Page</span>
+    <br>
+    <label class="subHeading-my">Rule Page
+    </label>
+    <br>
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-4">
+    <p-growl [(value)]="msgs" styleClass="registerGrowl"></p-growl>
+  </div>
+</div>
+
+<div class="row" id="row-border-mys" style="margin-left: 16px;margin-right: 16px;">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <mat-horizontal-stepper linear="true" #stepper="matHorizontalStepper">
+      <mat-step>
+        <ng-template matStepLabel>Rules</ng-template>
+        <div class="row" id="row-new">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="tableContent">RULE NAME </th>
+                <th class="tableContent">START DATE </th>
+                <th class="tableContent">END DATE</th>
+                <th class="tableContent">CATEGORY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rule of allRules | paginate: { itemsPerPage: 5, currentPage: p};">
+                <td class="tableContent">{{rule.ruleName}}</td>
+                <td class="tableContent">{{rule.startDate}}</td>
+                <td class="tableContent">{{rule.endDate}}</td>
+                <td class="tableContent">{{rule.ruleCategory}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls (pageChange)="p = $event" autoHide="true" class="paginateResults"></pagination-controls>
+        </div>
+        <br>
+        <br>
+        <div class="row" id="row-new">
+          <div class="col-sm-9 col-md-9 col-lg-9"></div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <button mat-button matStepperNext id="nextToSecondStepRuleP" (click)="goToRule()">Next</button>
+          </div>
+        </div>
+
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>New Rule</ng-template>
+        <div class="row" style="height: 550px;">
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <div class="form-group">
+              <label>Rule Name:</label>
+              <input type="text" class="form-control form-controlStyleInput rulePageInput" [(ngModel)]="RuleName" placeholder="Rule Name"
+                aria-describedby="Rule Name" required>
+            </div>
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <div class="form-group">
+              <label>Category</label>
+              <select class="form-control form-controlStyle" placeholder="Category Name" [(ngModel)]="CategoryValue">
+                <!-- (change)="onChagneCategory(CategoryValue,$event)"> "primeng": "^5.2.0-rc.2", -->
+                <option [value]="null">Select Category </option>
+                <option *ngFor="let CL of CategoryLists;index as CLI" [value]="CL.ruleCategory">{{ CL.ruleCategory }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <p class="marBotTen">Start Date</p>
+            <!-- <p-calendar [inline]="false" [(ngModel)]="Start_Date" (onSelect)="selectedStartDate(Start_Date)" [showIcon]="true"></p-calendar> -->
+            <p-calendar [inline]="false" [style]="{ 'overflow': 'visible', 'z-index': '999' }" [(ngModel)]="Start_Date" [showIcon]="true"
+              (onSelect)="selectedStartDate(Start_Date, End_Date)"></p-calendar>
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3 date">
+            <p class="marBotTen">End Date</p>
+            <!-- <p-calendar [inline]="false" [minDate]="End_Date" [(ngModel)]="End_Date" (onSelect)="selectedEndDate(End_Date)" [showIcon]="true"></p-calendar> -->
+            <p-calendar [inline]="false" [minDate]="minInEndDate" [style]="{ 'overflow': 'visible', 'z-index': '999' }" [(ngModel)]="End_Date"
+              [showIcon]="true" (onSelect)="selectedEndDate(End_Date, Start_Date)"></p-calendar>
+          </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <p class="marBotTen">Start Date</p>
+                <p-calendar [inline]="false" [(ngModel)]="Start_Date" (onSelect)="selectedStartDate(Start_Date)"  [showIcon]="true" [style]="{'position': 'fixed', 'overflow': 'visible', 'z-index': '999'}"></p-calendar>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <p class="marBotTen">End Date</p>
+                <p-calendar [inline]="false" [(ngModel)]="End_Date" (onSelect)="selectedEndDate(End_Date)" [showIcon]="true" [style]="{'position': 'fixed', 'overflow': 'visible', 'z-index': '999'}"></p-calendar>
+              </div>
+        </div>-->
+        <div class="row" id="row-new">
+
+
+          <div class="col-sm-6 col-md-6 col-lg-6"></div>
+          <div class="col-sm-6 col-md-6 col-lg-6 text-right">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <button mat-button matStepperPrevious id="backToFirstStepRuleP">Back</button>
+              </li>
+              <li class="list-inline-item">
+                <button mat-button id="nextToSecondStepRuleP" (click)="nextToThird()">Next</button>
+              </li>
+            </ul>
+          </div>
+          <!--<button mat-button matStepperPrevious id="backToFirstStepRuleP">Back</button>
+              <button mat-button matStepperNext id="nextToSecondStepRuleP">Next</button>-->
+        </div>
+
+        <!-- <div class="row justify-content-end">
+          <div class="col-sm-3 col-md-3 col-lg-3 text-right">
+            <button mat-button matStepperNext id="nextToSecondStepRuleP">Next</button>
+          </div>
+        </div> -->
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Rule Owner</ng-template>
+        <div class="row" id="row-new">
+          <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+            <thead>
+              <tr>
+                <th class="tableContent"></th>
+                <th class="tableContent">AGENT NAME</th>
+                <th class="tableContent">TERRITORY NAME</th>
+                <th class="tableContent">START DATE</th>
+                <th class="tableContent">END DATE</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let single_owner of RuleOwnerList| paginate: { itemsPerPage: 5, currentPage: p,id:'list'};let i=index">
+                <td class="tableContent">
+                  <input type="checkbox" [checked]="single_owner.selected" (change)="onSelect(single_owner, $event,i)" />
+                </td>
+                <td class="tableContent">{{single_owner.agentName}}</td>
+                <td class="tableContent">{{single_owner.territoryName}}</td>
+                <td class="tableContent">{{single_owner.startDate}}</td>
+                <td class="tableContent">{{single_owner.endDate}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls (pageChange)="p = $event" autoHide="true" id="list" class="paginateResults"></pagination-controls>
+        </div>
+        <div class="row justify-content-end">
+          <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <button mat-button matStepperPrevious id="backToFirstStepRuleP">Back</button>
+              </li>
+              <li class="list-inline-item">
+                <button mat-button (click)='nextStepThree()' id="nextToThirdStepRuleP">Next</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Selected Owner</ng-template>
+        <div class="row" id="row-new">
+          <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+            <thead>
+              <tr>
+                <th class="tableContent">AGENT NAME</th>
+                <th class="tableContent">SPLIT %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let single_owner of owner_list| paginate: { itemsPerPage: 5, currentPage: p,id:'list'};let i=index">
+                <td class="tableContent">{{single_owner.agentName}}</td>
+                <td class="tableContent" contenteditable (click)='splitCheck(single_owner)' (keyup)="splitChecks()" >{{split}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls (pageChange)="p = $event" autoHide="true" id="list" class="paginateResults"></pagination-controls>
+        </div>
+        <div class="row justify-content-end">
+          <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <button mat-button matStepperPrevious id="backToFirstStepRuleP">Back</button>
+              </li>
+              <li class="list-inline-item">
+                <button mat-button (click)='nextStepFour()' id="nextToThirdStepRuleP">Next</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Expression</ng-template>
+        <query-builder [(ngModel)]='uiExpression' [config]='currentConfig' style="padding: 15px;">
+          <ng-container *queryButtonGroup="let ruleset; let addRule=addRule; let addRuleSet=addRuleSet; let removeRuleSet=removeRuleSet">
+            <button mat-icon-button color="primary" (click)="addRule()" matTooltip="Add Rule" matTooltipPosition="above">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="addRuleSet()" matTooltip="Add Rule Set" matTooltipPosition="above">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="removeRuleSet()" matTooltip="Remove Rule Set" matTooltipPosition="above">
+              <mat-icon>remove_circle_outline</mat-icon>
+            </button>
+          </ng-container>
+          <ng-container *queryRemoveButton="let rule; let removeRule=removeRule">
+            <button mat-icon-button color="accent" (click)="removeRule(rule)" matTooltip="Remove Rule" matTooltipPosition="above">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </ng-container>
+          <ng-container *querySwitchGroup="let ruleset;  let onChange=onChange">
+            <mat-radio-group *ngIf="ruleset" [(ngModel)]="ruleset.condition" (ngModelChange)="onChange()">
+              <mat-radio-button value="and">And</mat-radio-button>
+              <mat-radio-button value="or">Or</mat-radio-button>
+            </mat-radio-group>
+          </ng-container>
+          <ng-container *queryInput="let rule; let field=field; type: 'string'; let onChange=onChange">
+            <mat-form-field>
+              <input matInput [(ngModel)]="rule.value" (ngModelChange)="onChange()" (blur)="apply()">
+            </mat-form-field>
+          </ng-container>
+          <ng-container *queryInput="let rule; let field=field; type: 'number'; let onChange=onChange">
+            <mat-form-field>
+              <input matInput [(ngModel)]="rule.value" type="number" (ngModelChange)="onChange()" (blur)="apply()">
+            </mat-form-field>
+          </ng-container>
+          <ng-container *queryInput="let rule; type: 'date'; let onChange=onChange">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" [(ngModel)]="rule.value" (ngModelChange)="getDate($event, rule)" (blur)="apply()">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *queryInput="let rule; let field=field; let options=options; type: 'multiselect'">
+            <mat-form-field>
+              <mat-select multiple [(ngModel)]="rule.value">
+                <mat-option *ngFor="let opt of options" [value]="opt.value">
+                  {{ opt.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *queryInput="let rule; let field=field; let options=options; type: 'category'; let onChange=onChange">
+            <mat-form-field>
+              <mat-select [(ngModel)]="rule.value" (ngModelChange)="onChange()" (blur)="apply()">
+                <mat-option *ngFor="let opt of options" [value]="opt.value">
+                  {{ opt.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *queryEntity="let rule; let entities=entities; let onChange=onChange">
+            <mat-form-field>
+              <mat-select [(ngModel)]="rule.entity" (ngModelChange)="onChange($event, rule)">
+                <mat-option *ngFor="let entity of entities" [value]="entity.value">
+                  {{entity.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *queryField="let rule; let fields=fields; let onChange=onChange; let getFields = getFields">
+            <mat-form-field>
+              <mat-select [(ngModel)]="rule.field" (ngModelChange)="onChange($event, rule)" (blur)="changeFields($event, rule)">
+                <mat-option *ngFor="let field of getFields(rule.entity)" [value]="field.value">{{field.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *queryOperator="let rule; let operators=operators; let onChange=onChange">
+            <mat-form-field>
+              <mat-select [(ngModel)]="rule.operator" (ngModelChange)="onChange()" (blur)="apply()">
+                <mat-option *ngFor="let value of operators" [value]="value">{{value}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+        </query-builder>
+        <div>{{userExpression}}</div>
+        <div class="row justify-content-end">
+          <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <button mat-button matStepperPrevious id="backToSecondStepRuleP">Back</button>
+              </li>
+              <li class="list-inline-item">
+                <button mat-button id="nextToFourthStepRuleP" (click)="apply()">Next</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Review & Save</ng-template>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="table-responsive">
+              <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+                <thead>
+                  <tr>
+                    <th class="tableContent">RULE NAME</th>
+                    <th class="tableContent">CATEGORY NAME</th>
+                    <th class="tableContent">START DATE</th>
+                    <th class="tableContent">END DATE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tableContent">{{ RuleName }}</td>
+                    <td class="tableContent">{{ CategoryValue }}</td>
+                    <td class="tableContent">{{ Start_Date | date: 'mediumDate' }}</td>
+                    <td class="tableContent">{{ End_Date | date: 'mediumDate' }}</td>
+                  </tr>
+                </tbody>
+
+              </table>
+              <br>
+
+              <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+                <thead>
+                  <tr>
+                    <th class="tableContent"> AGENT NAME</th>
+                    <th class="tableContent">TERRITORY NAME</th>
+                    <th class="tableContent">SPLIT %</th>
+                  </tr>
+
+                </thead>
+                <tbody>
+                  <tr *ngFor="let owner of owner_list">
+                    <td class="tableContent">{{owner.agentName}}</td>
+                    <td class="tableContent">{{owner.territoryName}}</td>
+                    <td class="tableContent">{{owner.splitPercent}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+                <thead>
+                  <tr>
+                    <th class="tableContent">SQL EXPRESSION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tableContent">{{ userExpression }}</td>
+                  </tr>
+                </tbody>
+
+
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-end">
+          <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+            <button mat-button matStepperPrevious id="backToThirdStepRuleP">Back</button>
+            <button mat-button id="saveStepRuleP" (click)="onSaveRule()" style="margin-left: 15px;">Save</button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</div>

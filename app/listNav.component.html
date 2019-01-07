@@ -1,0 +1,8 @@
+<div class="row row-border " id="row-new">
+    <div class=" col-sm-1 col-md-1 col-lg-1"  style="padding-left:0;width:8%;">
+        <a (click)="routeClick('create')" [ngClass]="{'salesLinkActive': showCreateActive,'sales-link':!showCreateActive }" [routerLink]="['/list']">Create </a>  
+    </div>
+    <div class=" col-sm-1 col-md-1 col-lg-1" style="width:10%;" >
+        <a (click)="routeClick('modify')" [ngClass]="{'salesLinkActive': showModifyActive,'sales-link':!showCreateActive }" [routerLink]="['/modifyList']">Modify</a>
+    </div>
+</div>

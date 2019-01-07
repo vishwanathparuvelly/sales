@@ -1,0 +1,111 @@
+<mat-nav-list [ngClass]="{'expanded': isExpanded ,'collapsed':!isExpanded}">
+    <mat-list-item style="height:14px;float:right;position:relative;" id="min_max_icon">
+        <a mat-list-item *ngIf="!isExpanded" (click)="isExpanded = !isExpanded" style="cursor:pointer;border:0;height:14px;">
+            <img src="../assets/images/Crediting/orangeIcons/expand.svg" style="padding-right:10px;">
+        </a>
+        <a mat-list-item *ngIf="isExpanded" (click)="isExpanded = !isExpanded" style="cursor:pointer;border:0;height:14px;">
+            <img src="../assets/images/Crediting/orangeIcons/collapse.svg" style="padding-right:10px;">
+        </a>
+    </mat-list-item>
+    <br>
+    <mat-list-item id="screen_icon">
+        <a mat-list-item style="cursor:pointer;" style="padding-left:6px;">
+            <img src="../assets/images/Crediting/orangeIcons/mainIcon.svg" height="32" width="33">
+            <p *ngIf="isExpanded" style="color:#F37A29;font-weight:bold;font-size:28px;font-family: Helvetica!important;"
+                class="navItemText">Crediting </p>
+        </a>
+    </mat-list-item>
+    <mat-list-item *ngIf="isExpanded" id="screen_icon"></mat-list-item>
+    <mat-list-item *ngIf="!isExpanded" id="screen_icon">
+        <a mat-list-item style="padding-left:12px;">
+            <span style="color:#F37A29;font-size:28px;width:21px;font-family: Helvetica !important;"><b>C</b></span>
+        </a>
+    </mat-list-item>
+    <mat-divider style="background-color:#F37A29;height:2px;"></mat-divider>
+    <!-- <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showCategory }">
+        <a mat-list-item (click)="goToCategory()" class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/category.svg" height="23" width="23" *ngIf="!showCategory">
+            <img src="../assets/images/Crediting/orangeIcons/cockpit.svg" height="23" width="23" *ngIf="showCategory">
+            <p *ngIf="isExpanded" class="navItemText"  >Category</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showRule }"> 
+        <a mat-list-item (click)="goToRule()" class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/rule.svg" height="23" width="23" *ngIf="!showRule">
+            <img src="../assets/images/Crediting/orangeIcons/rule.svg" height="23" width="23" *ngIf="showRule">
+            <p *ngIf="isExpanded" class="navItemText"  >Rule</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showRuleReport }">
+        <a mat-list-item (click)="goToRuleReport()" class="imgIcon" >
+            <img src="../assets/images/Crediting/grayIcons/ruleReport.svg" height="23" width="23" *ngIf="!showRuleReport">
+            <img src="../assets/images/Crediting/orangeIcons/ruleReport.svg" height="23" width="23" *ngIf="showRuleReport">
+            <p *ngIf="isExpanded" class="navItemText" >Rule Report</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showCockpit }">
+        <a mat-list-item (click)="goToCockpit()"  class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/cockpit.svg" height="23" width="23" *ngIf="!showCockpit">
+            <img src="../assets/images/Crediting/orangeIcons/cockpit.svg" height="23" width="23" *ngIf="showCockpit">
+            <p *ngIf="isExpanded" class="navItemText" >Cockpit</p>
+        </a>
+    </mat-list-item> -->
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showAttribute }">
+        <a mat-list-item (click)="goToAttribute()" class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/attributes.svg" height="23" width="23" *ngIf="!showAttribute">
+            <img src="../assets/images/Crediting/orangeIcons/attributes.svg" height="23" width="23" *ngIf="showAttribute">
+            <p *ngIf="isExpanded" class="navItemText">Attribute</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showCategoryNew }">
+        <a mat-list-item (click)="goToCategoryNew()" class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/category.svg" height="23" width="23" *ngIf="!showCategoryNew">
+            <img src="../assets/images/Crediting/orangeIcons/category.svg" height="23" width="23" *ngIf="showCategoryNew">
+            <p *ngIf="isExpanded" class="navItemText">Category</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showProfile }">
+        <a mat-list-item (click)="goToProfile()" class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/profile.svg" height="23" width="23" *ngIf="!showProfile">
+            <img src="../assets/images/Crediting/orangeIcons/profile.svg" height="23" width="23" *ngIf="showProfile">
+            <p *ngIf="isExpanded" class="navItemText">Profile</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showList }">
+        <a mat-list-item (click)="goToList()" class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/contact_list.svg" height="23" width="23" *ngIf="!showList">
+            <img src="../assets/images/Crediting/orangeIcons/contact_list.svg" height="23" width="23" *ngIf="showList">
+            <p *ngIf="isExpanded" class="navItemText">List</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showRule }">
+        <a mat-list-item (click)="goToRule()" class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/rule.svg" height="23" width="23" *ngIf="!showRule">
+            <img src="../assets/images/Crediting/orangeIcons/rule.svg" height="23" width="23" *ngIf="showRule">
+            <p *ngIf="isExpanded" class="navItemText">Rule</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showCockpit }">
+        <a mat-list-item class="imgIcon">
+            <!-- <a mat-list-item (click)="goToCockpit()"  class="imgIcon"> -->
+            <img src="../assets/images/Crediting/grayIcons/cockpit.svg" height="23" width="23" *ngIf="!showCockpit">
+            <img src="../assets/images/Crediting/orangeIcons/cockpit.svg" height="23" width="23" *ngIf="showCockpit">
+            <p *ngIf="isExpanded" class="navItemText">Cockpit</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showRuleReport }">
+        <a mat-list-item (click)="goToRuleReport()" class="imgIcon">
+            <img src="../assets/images/Crediting/grayIcons/ruleReport.svg" height="23" width="23" *ngIf="!showRuleReport">
+            <img src="../assets/images/Crediting/orangeIcons/ruleReport.svg" height="23" width="23" *ngIf="showRuleReport">
+            <p *ngIf="isExpanded" class="navItemText">Rule Report</p>
+        </a>
+    </mat-list-item>
+    <mat-list-item id="screen_icon" [ngClass]="{'sales-credit-class': showTemplate }">
+        <a mat-list-item class="imgIcon">
+            <!-- <a mat-list-item (click)="goToTemplate()" class="imgIcon" > -->
+            <img src="../assets/images/Crediting/grayIcons/ruleReport.svg" height="23" width="23" *ngIf="!showTemplate">
+            <img src="../assets/images/Crediting/orangeIcons/ruleReport.svg" height="23" width="23" *ngIf="showTemplate">
+            <p *ngIf="isExpanded" class="navItemText">Template</p>
+        </a>
+    </mat-list-item>
+</mat-nav-list>

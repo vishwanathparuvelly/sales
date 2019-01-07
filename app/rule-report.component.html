@@ -1,0 +1,46 @@
+<mat-card >
+	<mat-card-header> 
+		Active Rules By Category	
+	</mat-card-header>
+	<mat-card-content> 	
+		<ngx-charts-advanced-pie-chart
+		      [scheme]="colorScheme"
+		      [results]="single"
+		      [gradient]="gradient"
+		      (select)="onSelect($event)"
+		      [view]="view">
+		</ngx-charts-advanced-pie-chart>
+	</mat-card-content>
+</mat-card>
+<br/>
+
+<mat-card >
+	<mat-card-header> 
+		Transactions By Rule (Year to Date)
+	</mat-card-header>
+	<mat-card-content> 	
+		<ngx-charts-advanced-pie-chart
+		      [scheme]="colorScheme"
+		      [results]="trx"
+		      [gradient]="gradient"
+		      (select)="onSelect($event)"
+		      [view]="view">
+		</ngx-charts-advanced-pie-chart>
+	</mat-card-content>
+</mat-card>
+<br/>
+
+<ngx-charts-bar-vertical-2d
+      [view]="view2"
+      [scheme]="colorScheme"
+      [results]="multi"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      (select)="onSelect($event)">
+ </ngx-charts-bar-vertical-2d>

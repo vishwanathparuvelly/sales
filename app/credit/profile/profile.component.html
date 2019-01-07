@@ -1,0 +1,287 @@
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+  crossorigin="anonymous"> -->
+  <style>
+  .one {
+    background-image: -webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
+  background-image: gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
+  color:transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  }
+  </style>
+<div class="row " id="row-new">
+  <div class="col-sm-6 col-md-6 col-lg-6">
+
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-4">
+    <p-growl [(value)]="msgs" styleClass="registerGrowl"></p-growl>
+  </div>
+</div>
+<mat-horizontal-stepper linear="true" #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Create Profile</ng-template>
+    <div class="row" style="height: 350px;">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <table class="table">
+          <tr>
+            <td class="brToZe width33Cat">
+              <div class="form-group">
+                <label for="NameField">Profile Name</label>
+                <input type="text" class="form-control form-controlStyleInput brRFi" id="NameField" placeholder="Profile Name"
+                  [(ngModel)]="ProfileName" required>
+              </div>
+            </td>
+            <td class="brToZe width33Cat">
+              <p class="marBotTens">Start Date</p>
+              <!-- <p-calendar [inline]="false" [(ngModel)]="Start_Date" (onSelect)="selectedStartDate(Start_Date)" [showIcon]="true"></p-calendar> -->
+              <p-calendar [inline]="false" [style]="{ 'overflow': 'visible', 'z-index': '999' }"
+              [(ngModel)]="Start_Date" [showIcon]="true" (onSelect)="selectedStartDate(Start_Date)"></p-calendar>
+            </td>
+
+            <td class="brToZe width33Cat">
+              <p class="marBotTens">End Date</p>
+              <p-calendar [inline]="false" [minDate]="minInEndDate" [style]="{ 'overflow': 'visible', 'z-index': '999' }"
+              [(ngModel)]="End_Date" [showIcon]="true" (onSelect)="selectedEndDate(End_Date, Start_Date)"></p-calendar>
+                <!-- <p-calendar [inline]="false" [(ngModel)]="End_Date" (onSelect)="selectedEndDate(End_Date)" [minDate]="End_Date" [showIcon]="true"></p-calendar> --> -->
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div style="position: absolute;top: 150px;right: 35px;">
+      <button mat-button id="buttonNextFwd" (click)="nextToSecond()">Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Create Expression</ng-template>
+    <query-builder [(ngModel)]='uiExpression' [config]='currentConfig' style="padding: 15px;">
+      <ng-container *queryButtonGroup="let ruleset; let addRule=addRule; let addRuleSet=addRuleSet; let removeRuleSet=removeRuleSet" (blur)="apply()">
+        <button mat-icon-button color="primary" (click)="addRule()" matTooltip="Add Rule" matTooltipPosition="above">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="addRuleSet()" matTooltip="Add Rule Set" matTooltipPosition="above">
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" (click)="removeRuleSet()" matTooltip="Remove Rule Set"
+          matTooltipPosition="above">
+          <mat-icon>remove_circle_outline</mat-icon>
+        </button>
+      </ng-container>
+      <ng-container *queryRemoveButton="let rule; let removeRule=removeRule">
+        <button mat-icon-button color="accent" (click)="removeRule(rule)" matTooltip="Remove Rule" matTooltipPosition="above" (click)="apply()">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </ng-container>
+      <ng-container *querySwitchGroup="let ruleset;  let onChange=onChange">
+        <mat-radio-group *ngIf="ruleset" [(ngModel)]="ruleset.condition" (ngModelChange)="onChange($event)">
+          <mat-radio-button value="and">And</mat-radio-button>
+          <mat-radio-button value="or">Or</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+      <ng-container *queryInput="let rule; let field=field; type: 'string'; let onChange=onChange">
+        <mat-form-field>
+          <input matInput [(ngModel)]="rule.value" (ngModelChange)="onChange()" (blur)="apply()">
+        </mat-form-field>
+      </ng-container>
+      <ng-container *queryInput="let rule; let field=field; type: 'number'; let onChange=onChange">
+        <mat-form-field>
+          <input matInput [(ngModel)]="rule.value" type="number" (ngModelChange)="onChange()" (blur)="apply()">
+        </mat-form-field>
+      </ng-container>
+      <ng-container *queryInput="let rule; type: 'date'; let onChange=onChange">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="rule.value" (ngModelChange)="getDate($event, rule)"
+            (blur)="apply()">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *queryInput="let rule; let field=field; let options=options; type: 'multiselect'">
+        <mat-form-field>
+          <mat-select multiple [(ngModel)]="rule.value">
+            <mat-option *ngFor="let opt of options" [value]="opt.value">
+              {{ opt.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *queryInput="let rule; let field=field; let options=options; type: 'category'; let onChange=onChange">
+        <mat-form-field>
+          <mat-select [(ngModel)]="rule.value" (ngModelChange)="onChange()" (blur)="apply()">
+            <mat-option *ngFor="let opt of options" [value]="opt.value">
+              {{ opt.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *queryEntity="let rule; let entities=entities; let onChange=onChange">
+        <mat-form-field>
+          <mat-select [(ngModel)]="rule.entity" (ngModelChange)="onChange($event, rule)">
+            <mat-option *ngFor="let entity of entities" [value]="entity.value">
+              {{entity.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *queryField="let rule; let fields=fields; let onChange=onChange; let getFields = getFields">
+        <mat-form-field>
+          <mat-select [(ngModel)]="rule.field" (ngModelChange)="onChange($event, rule)" (blur)="changeFields($event, rule)">
+            <mat-option *ngFor="let field of getFields(rule.entity)" [value]="field.value">{{field.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *queryOperator="let rule; let operators=operators; let onChange=onChange">
+        <mat-form-field>
+          <mat-select [(ngModel)]="rule.operator" (ngModelChange)="onChange()" (blur)="apply()">
+            <mat-option *ngFor="let value of operators" [value]="value">{{value}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+    </query-builder>
+    <div>{{userExpression}}</div>
+    <div class="row justify-content-end">
+      <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <button mat-button matStepperPrevious id="backToSecondStepPro">Back</button>
+          </li>
+          <li class="list-inline-item">
+            <button mat-button matStepperNext id="nextToThirdStepPro" (click)="apply()">Next</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Add Category</ng-template>
+    <div class="row" [style.height.px]="height">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <pre>{{ CategoryPriorityForm.value | json }}</pre>
+        <form [formGroup]="CategoryPriorityForm">
+          <div>
+            <button mat-icon-button color="primary" (click)="addBut()" style="cursor: pointer;float: right;" matTooltip="Add"
+              matTooltipPosition="above">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <div formArrayName="CatePriorData">
+            <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+              <tr *ngFor="let item of formCatData(CategoryPriorityForm); let i = index" [formGroupName]="i">
+                <td class="brToZe" style="width: 25%;">
+                  <div class="form-group">
+                    <label>Select Category:</label>
+                    <select class="form-control form-controlStyle" placeholder="Select Category" formControlName="ruleCategory"
+                      (change)="onChagneCategory(CategoryName,$event)">
+                      <option>Select Category</option>
+                      <option *ngFor="let CL of categoryList;index as CLI" [value]="CL.ruleCategory">{{ CL.ruleCategory
+                        }}</option>
+                    </select>
+                  </div>
+                </td>
+                <td class="brToZe" style="width: 25%;">
+                  <div class="form-group">
+                    <label for="NameField">Priority</label>
+                    <input type="number" class="form-control form-controlStyleInput brRFi" id="PriorityField"
+                      placeholder="Enter Priority" formControlName="priority" required>
+                  </div>
+                </td>
+                <td class="brToZe" style="width: 25%;">
+                  <p class="marBotTen">Start Date</p>
+                  <p-calendar [inline]="false" [style]="{ 'overflow': 'visible' }" formControlName="start_Date"
+                    dateFormat="yy-mm-dd" [showIcon]="true"></p-calendar>
+                </td>
+
+                <td class="brToZe" style="width: 25%;">
+                  <p class="marBotTen">End Date</p>
+                  <p-calendar [inline]="false" [style]="{ 'overflow': 'visible' }" formControlName="end_Date"
+                    dateFormat="yy-mm-dd" [showIcon]="true"></p-calendar>
+                </td>
+                <td class="brToZe">
+                  <button mat-icon-button color="primary" (click)="removeCatData(i)" style="cursor: pointer;float: right;"
+                    matTooltip="Remove" matTooltipPosition="above">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </table>
+            <div class="row justify-content-end">
+              <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                    <button mat-button matStepperPrevious id="backToSecondStepProf">Back</button>
+                  </li>
+                  <li class="list-inline-item">
+                    <button mat-button matStepperNext id="nextToFourthStepProf" style="margin-left: 15px;">Next</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Review and Save</ng-template>
+    <p class="mBZero">Profile Information:</p>
+    <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+      <thead>
+        <tr>
+          <!-- <th>Customer Name</th> -->
+          <th class="tableContent">Profile Name</th>
+          <th class="tableContent">Start Date</th>
+          <th class="tableContent">End Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <!-- <td>{{CustomerName}}</td> -->
+          <td class="tableContent">{{ ProfileName }}</td>
+          <td class="tableContent">{{ Start_Date | date: 'mediumDate' }}</td>
+          <td class="tableContent">{{ End_Date | date: 'mediumDate' }}</td>
+
+        </tr>
+      </tbody>
+
+    </table>
+    <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+      <thead>
+        <tr>
+          <th class="tableContent">Category Name</th>
+          <th class="tableContent">Priority</th>
+          <th class="tableContent">Start Date</th>
+          <th class="tableContent">End Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let CPF of CategoryPriorityForm.value.CatePriorData| paginate: { itemsPerPage: 5, currentPage: p2, id:'list2'};index as CPFI;">
+          <td class="tableContent">{{CPF.ruleCategory}}</td>
+          <td class="tableContent">{{ CPF.priority }}</td>
+          <td class="tableContent">{{ CPF.start_Date | date: 'mediumDate' }}</td>
+          <td class="tableContent">{{ CPF.end_Date | date: 'mediumDate' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p2 = $event" autoHide="true" id="list2" class="paginateResults"></pagination-controls>
+    <br>
+    <p class="mBZero" style="margin-top: 15px;"><strong>Expression Information:</strong></p>
+    <div>{{ userExpression }}</div>
+    <!-- <pre>{{uiExpression | json}}</pre> -->
+    <div class="row justify-content-end">
+      <div class="col-sm-12 col-md-12 col-lg-12 text-right">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <button mat-button matStepperPrevious id="backToThirdStepProf">Back</button>
+          </li>
+          <li class="list-inline-item">
+            <button mat-button id="saveProfile" style="margin-left: 15px;" (click)="onSaveProfile()">Save</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

@@ -1,0 +1,58 @@
+.application-container {
+  position: absolute;
+  top: 60px;
+  bottom: 60px;
+  left: 0;
+  right:0;
+  height:90%;
+}
+.application-router-view{
+  width:90%;
+  margin-top: 5%;
+  margin-left:5%;
+  margin-right: 5%;
+  margin-bottom:5%;
+  
+}
+
+.application-sidenav {
+  display: flex;
+  width: 12%;
+  /*background-color: #1565C0;*/
+  min-height: 700px;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
+
+.application-header {
+  position: fixed;
+  height:8%;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background-color: #1565C0;
+  box-shadow: 0 3px 5px 1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
+
+.application-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.app-menu{
+  margin-top:10% ;
+  top: 10 !important;
+}
+
+.app-sub-menu-indent{
+  padding-left: 1px;
+}
+
+.app-menu-item-width{
+  width: 100%;
+}
+.app-border{
+  border-width: 1px;
+}

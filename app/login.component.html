@@ -1,0 +1,16 @@
+<div class="row" id="row-new">
+    <div class="col-sm-4 col-md-4 cl-lg-4"></div>
+    <div class="col-sm-4 col-md-4 cl-lg-4">
+        <label class="label_style">Username</label>
+        <br>
+        <input type="text" class="inputFields" placeholder="Username" [(ngModel)]="username" required  > 
+        <br>
+        <label class="label_style">Password</label>
+        <br>
+        <input type="password" class="inputFields" placeholder="Password" [(ngModel)]="password" required  >  
+        <br>
+        <br>
+        <button mat-raised-button color="primary" (click)="login()"  style="background-color:#508DCA;color:white;">Login</button>
+    </div>
+    <div class="col-sm-4 col-md-4 cl-lg-4"></div>
+</div>

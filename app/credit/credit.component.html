@@ -1,0 +1,50 @@
+<div class="row" id="row-border-my">
+  <div class="col-sm-6 col-md-6 col-lg-6">
+    <span class="heading-my">Profile</span>
+    <br>
+    <label class="subHeading-my">Profile</label>
+    <br>
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+  </div>
+  <!-- <div class="col-sm-4 col-md-4 col-lg-4">
+    <p-growl class="template_growl_msg" life="10000"></p-growl>mat_text_Credit.mat-tab-link-activeCredit
+  </div> -->
+</div>
+
+<!--<div class="row" style="margin: 4px 0px -25px -15px;">
+  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 customSelectStyle">
+    <div class="form-group mBZero">
+      <label for="customerSelection">Select Customer</label>
+      <select class="form-control form-controlStyle advancedSearch" id="customerSelection" #cus [(ngModel)]="CustomerID"
+        (change)="clickSelectCustomer(cus.value,$event)">
+        <option>Select Customer</option>
+        <option *ngFor="let CL of CustomersList;index as CLI;" [value]="CL.Name">{{ CL.Name }}</option>
+      </select>
+    </div>
+  </div>
+</div> -->
+<!-- <div class="row row-border " id="row-new">
+    <div class=" col-sm-1 col-md-1 col-lg-1"  style="padding-left:0;width:8%;">
+        <a (click)="routeClick('create')" [ngClass]="{ 'salesLinkActive': showCreateActive }" [routerLink]="['modify_profile']">Modify</a>  
+    </div>
+    <div class=" col-sm-1 col-md-1 col-lg-1" style="width:10%;" >
+        <a (click)="routeClick('modify')" [ngClass]="{ 'salesLinkActive': showModifyActive }" [routerLink]="['create_profile']">Create</a>
+    </div>
+</div> -->
+<div class="row" id="row-spacing-my" style="margin-top: 25px;">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <nav>
+      <a class="mat_text_Credit" [routerLink]="['modify_profile']" [ngClass]="{ 'salesLinkActive': showModifyActive }">Modify
+        Profile</a>
+      <a class="mat_text_Credit" [routerLink]="['create_profile']" [ngClass]="{ 'salesLinkActive': showCreateActive }">Create
+        Profile</a>
+    </nav>
+  </div>
+</div>
+<div div class="row" style="margin: 25px 0px 0px 0px;">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<!-- 7893913436 - 35 -->

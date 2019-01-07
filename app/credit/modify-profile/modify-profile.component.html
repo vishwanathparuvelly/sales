@@ -1,0 +1,107 @@
+<div class="row " id="row-new" >
+    <div class="col-sm-6 col-md-6 col-lg-6">
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2">
+    </div>
+    <div class="col-sm-4 col-md-4 col-lg-4">
+        <p-growl [(value)]="msgs" styleClass="registerGrowl"></p-growl>
+    </div>
+</div>
+<mat-horizontal-stepper linear="true" #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Profiles List</ng-template>
+    <p>Profiles</p>
+    <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+      <thead>
+          <tr *ngIf="ProfileData.length > 0">
+              <!-- <th class="headerClass">Customer Name</th> -->
+              <th class="tableContent"> PROFILE NAME</th>
+              <th class="tableContent">START DATE</th>
+              <th class="tableContent">END DATE</th>
+              <th class="tableContent">
+                
+              </th>
+            </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let PD of ProfileData| paginate: { itemsPerPage: 5, currentPage: p2, id:'list2'};index as PDI;" style="cursor:pointer;" [ngClass]="{'selectedList':PD.selected}" (click)="onSelect(PD)">
+              <!-- <td style="font-size: 14px;border-top: none;">{{PD.CustomerName}}</td> -->
+              <td class="tableContent">{{PD.profileName}}</td>
+              <td class="tableContent">{{PD.startDate}}</td>
+              <td class="tableContent">
+                <span  *ngIf="!PD.showEdit" >{{PD.endDate }}</span>
+                  <p-calendar *ngIf="PD.showEdit" [inline]="false" [style]="{'overflow': 'visible', 'z-index': '999'}"
+                  [(ngModel)]="End_Date"  [showIcon]="true" (onSelect)="selectedEndDate(End_Date)"></p-calendar>
+              </td>
+              <td  class="tableContent">
+                  <a  (click)="editProfile(PD)" *ngIf="!PD.showEdit">
+                      <i class="material-icons" >edit</i>
+              </a>
+                    <a  (click)="cancel(PD)" *ngIf="PD.showEdit">
+                        <i class="material-icons" >cancel</i>
+                    </a>
+                    <a  (click)="update(PD)" *ngIf="PD.showEdit">
+                        <i class="material-icons" >save</i>
+                    </a>
+               
+              </td>
+              <!-- <!--<td style="border-top: none;"> 
+                <mat-checkbox color="primary" class="marginRightFive" [(ngModel)]="PD.Selected" (change)="onSelect(PDI,$event)"></mat-checkbox>
+              </td>-->
+            </tr>
+      </tbody>
+      
+    </table>
+    <pagination-controls (pageChange)="p2 = $event" autoHide="true" id="list2" class="paginateResults"></pagination-controls>
+    <br>
+    <table class="table" style="background-color:white;border:1px solid #D9D9D8" *ngIf="ExpressionArray.length > 0">
+      <tr>
+        <th class="tableContent">Expression</th>
+        
+      </tr>
+      <tr *ngFor="let EA of ExpressionArray;index as EAI;">
+        <td class="tableContent">{{EA.userExpression}} <mat-icon style="cursor: pointer;float: right;" (click)="editExpression(EA)" matStepperNext>edit</mat-icon></td>
+        
+      </tr>
+    </table>
+    <br>
+    <table class="table" style="background-color:white;border:1px solid #D9D9D8" *ngIf="profileDetail.length > 0">
+      <thead>
+          <tr>
+              <th class="tableContent">Category</th> 
+          </tr>
+      </thead>  
+      <tbody>
+          <tr>
+              <td class="tableContent"> <span *ngFor="let det of profileDetail;let i= index;">{{det.ruleCategory}}&nbsp;<span *ngIf="i<profileDetail.length-1">,</span></span></td>
+              
+            </tr>
+      </tbody>
+        
+      </table>
+    <div>
+     <!-- <button mat-button matStepperNext id="buttonNextFwd" [disabled]="ProfileSelectedIn==-1">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>-->
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Modification</ng-template>
+    <div class="row">
+      
+    </div>
+    <div class="row justify-content-end">
+      <div class="col-sm-3 col-md-3 col-lg-3 text-right">
+        <button mat-button matStepperPrevious id="undoButtonStyle_1">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-button matStepperNext id="undoButtonStyle_1">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Review and Save</ng-template>
+  </mat-step>
+</mat-horizontal-stepper>

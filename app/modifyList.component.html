@@ -1,0 +1,134 @@
+<div class="row " id="row-new" >
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <span class="heading">List</span><br>
+        <label class="subHeading" >List/ <b>Modify </b></label>
+        <br>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2">
+    </div>   
+    <div class="col-sm-4 col-md-4 col-lg-4">
+        <p-growl [(value)]="msgs" styleClass="registerGrowl"></p-growl>
+    </div>    
+</div>
+<div class="row row-spacing" id="row-new" >
+    <app-listNav [salesActiveLink]="salesActiveLinkValue"></app-listNav>
+</div>
+<br>
+<div class="row" id="row-new">
+    <div class="col-sm-3 col-md-3 col-lg-3">
+        <table class="table table-bordered" style="background-color:white;border:1px solid #D9D9D8">
+            <thead>
+                <tr>
+                    <th class="chooseClass" >Choose a List</th>
+                </tr> 
+            </thead>
+            <tbody>
+                <tr *ngFor="let single_list of newLists | paginate: { itemsPerPage: 5, currentPage: p, id:'list'};let i=index "   >
+                    <td  [ngClass]="{'selectedList':single_list.selected}" (click)="selectList(single_list)" style="cursor: pointer;color:#6E6761" >{{single_list.listName}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event" autoHide="true" id="list" class="paginateResults"></pagination-controls>
+    </div>
+    <div class="col-sm-9 col-md-9 col-lg-9" *ngIf="list.length>0">
+        <table class="table" style="background-color:white;border:1px solid #D9D9D8">
+            <thead>
+                <tr>
+                    <th class="tableContent" >LIST VALUE</th>
+                    <th class="tableContent">START DATE</th>
+                    <th class="tableContent">END DATE</th>
+                    <th class="tableContent">SPLIT %</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let single_val of updatedLists | paginate: { itemsPerPage: 5, currentPage: p2, id:'list2'};">
+                    <td class="tableContent">
+                        <label *ngIf="!single_val.new" >{{single_val.listValue}}</label>
+                        <input class="inputFields" *ngIf="single_val.new" type="text" placeholder="List Value" [(ngModel)]="single_val.listValue">
+                    </td>
+                    <td class="tableContent">
+                        <p-calendar   [(ngModel)]="single_val.displayStartDate"  [showIcon]="true" (ngModelChange)="changeStartDate(single_val)" ></p-calendar>
+                    </td>
+                    <td class="tableContent">
+                        <p-calendar   [(ngModel)]="single_val.displayStartDate"  [showIcon]="true" (ngModelChange)="changeStartDate(single_val)" ></p-calendar> 
+                    </td>
+                    <td class="tableContent">
+                        <label *ngIf="!single_val.new" >{{single_val.split}}</label>
+                        <input class="inputFields" *ngIf="single_val.new" type="text" placeholder="List Value" [(ngModel)]="single_val.split">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination-controls (pageChange)="p2 = $event" autoHide="true" id="list2" class="paginateResults"></pagination-controls>
+    </div>
+</div>
+          <!--<div class="row" id="row-new" *ngFor="let single_val of updatedLists">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label>List Value</label>
+                <br>
+                <label *ngIf="!single_val.new" >{{single_val.listValue}}</label>
+                <input *ngIf="single_val.new" type="text" placeholder="List Value" [(ngModel)]="single_val.listValue">
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label >Start Date</label>
+                <br>
+                <p-calendar   [(ngModel)]="single_val.displayStartDate"  [showIcon]="true" (ngModelChange)="changeStartDate(single_val)" ></p-calendar>
+                
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label class="label_style">End Date</label>
+                <br>
+                <p-calendar   [(ngModel)]="single_val.displayEndDate"  [showIcon]="true" (ngModelChange)="changeEndDate(single_val)" ></p-calendar>
+            </div>
+            
+          </div>-->
+          <br>
+<div class="row" id="row-new" *ngIf="list.length>0">
+    <div class="col-sm-1 col-md-1 col-lg-1"></div>
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <button mat-raised-button color="primary" id="buttonCustom" (click)="updateList()">Save</button>
+        <button mat-raised-button color="primary" id="buttonCustom"  (click)="addNew()">Add New Value</button>
+    </div>
+    <div class="col-sm-5 col-md-5 col-lg-5"></div>
+</div>
+
+    <!--<div *ngIf="list.length>0">
+        <div class="row" id="row-new" *ngFor="let single_val of list">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label class="label_style">List Name*</label>
+                <br>
+                <label >{{single_val.listName}}</label>
+                
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label class="label_style">List Value</label>
+                <br>
+                <label  >{{single_val.listValue}}</label>
+               
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label >Start Date</label>
+                <br>
+                <p-calendar   [(ngModel)]="single_val.displayStartDate"  [showIcon]="true" (ngModelChange)="changeStartDate(single_val)" ></p-calendar>
+                
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <label class="label_style">End Date</label>
+                <br>
+                <p-calendar   [(ngModel)]="single_val.displayEndDate"  [showIcon]="true" (ngModelChange)="changeEndDate(single_val)" ></p-calendar>
+            </div>
+          </div>
+          <div class="row" id="row-new">
+            <div class="col-sm-1 col-md-1 col-lg-1">
+                
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                    <button class="btn btn-primary" (click)="updateList()">Save</button>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <button class="btn btn-primary" (click)="addNew()">Add New Value</button>
+            </div>
+          </div>
+      
+    </div> -->
+    
